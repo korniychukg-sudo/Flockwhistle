@@ -26,8 +26,8 @@ func makeIcon(dir: String) {
             wobble: 0.5, taper: true, seed: bits(Int(gx)))
     }
 
-    let shankTop = pnt(470, 400)
-    let shankEnd = pnt(1120, 1130)
+    let shankTop = pnt(628, 342)
+    let shankEnd = pnt(1210, 1110)
     let dx = Double(shankEnd.x - shankTop.x), dy = Double(shankEnd.y - shankTop.y)
     let len = (dx * dx + dy * dy).squareRoot()
     let nx = -dy / len, ny = dx / len
@@ -79,49 +79,74 @@ func makeIcon(dir: String) {
 
     var horn: [CGPoint] = []
     var inner: [CGPoint] = []
-    var a = -0.5
-    let cx = 330.0, cy = 300.0
-    while a < 4.5 {
-        let rr = 250.0 - a * 10
-        horn.append(pnt(cx + cos(a) * rr, cy + sin(a) * rr * 0.92))
-        a += 0.12
+    let cx = 330.0, cy = 246.0
+    let aStart = 0.30, aEnd = 4.42
+    func hornRadius(_ t: Double) -> (Double, Double) {
+        let u = (t - aStart) / (aEnd - aStart)
+        let mid = 292.0 - u * 40
+        let wide = 142.0 - u * 104
+        return (mid + wide / 2, mid - wide / 2)
     }
-    a = 4.5
-    while a > -0.5 {
-        let rr = 152.0 - a * 5
-        inner.append(pnt(cx + cos(a) * rr, cy + sin(a) * rr * 0.92))
-        a -= 0.12
+    var a = aStart
+    while a <= aEnd {
+        let (outer, _) = hornRadius(a)
+        horn.append(pnt(cx + cos(a) * outer, cy + sin(a) * outer * 0.94))
+        a += 0.06
+    }
+    a = aEnd
+    while a >= aStart {
+        let (_, innerR) = hornRadius(a)
+        inner.append(pnt(cx + cos(a) * innerR, cy + sin(a) * innerR * 0.94))
+        a -= 0.06
     }
     let hornBody = horn + inner
-    p.poly(hornBody.map { pnt(Double($0.x) + 26, Double($0.y) + 34) }, Field.night.al(0.42))
-    p.poly(hornBody, Field.bone)
+    p.poly(hornBody.map { pnt(Double($0.x) + 30, Double($0.y) + 40) }, Field.night.al(0.46))
+    p.poly(hornBody, Field.oat)
     p.clip(pathOf(hornBody)) {
         if let g = CGGradient(colorsSpace: rgbSpace,
-                              colors: [cg(Field.bone.lt(0.55)), cg(Field.bone.dk(0.10)),
-                                       cg(Field.sepia.dk(0.10))] as CFArray,
-                              locations: [0, 0.45, 1]) {
-            p.ctx.drawRadialGradient(g, startCenter: CGPoint(x: cx - 90, y: cy - 90),
-                                     startRadius: 0,
-                                     endCenter: CGPoint(x: cx - 90, y: cy - 90),
-                                     endRadius: 420, options: [.drawsAfterEndLocation])
+                              colors: [cg(Tone(r: 0.988, g: 0.965, b: 0.898)),
+                                       cg(Tone(r: 0.902, g: 0.827, b: 0.647)),
+                                       cg(Tone(r: 0.639, g: 0.518, b: 0.337)),
+                                       cg(Field.sepia.dk(0.44))] as CFArray,
+                              locations: [0, 0.34, 0.72, 1]) {
+            p.ctx.drawLinearGradient(g, start: CGPoint(x: cx - 250, y: cy - 250),
+                                     end: CGPoint(x: cx + 250, y: cy + 300),
+                                     options: [.drawsBeforeStartLocation, .drawsAfterEndLocation])
         }
         var rh = Dice(6607)
-        var t = -0.5
-        while t < 4.5 {
-            let rr0 = 152.0 - t * 5
-            let rr1 = 250.0 - t * 10
-            pen(p, [pnt(cx + cos(t) * rr0, cy + sin(t) * rr0 * 0.92),
-                    pnt(cx + cos(t) * rr1, cy + sin(t) * rr1 * 0.92)],
-                weight: rh.r(1.0, 2.6),
-                colour: (rh.chance(0.5) ? Field.sepia.dk(0.06) : Field.bone.lt(0.30)).al(rh.r(0.04, 0.14)),
-                wobble: 0.5, taper: true, seed: bits(Int(t * 100)))
-            t += 0.05
+        var t = aStart
+        while t <= aEnd {
+            let (outer, innerR) = hornRadius(t)
+            let f = rh.r(0.06, 0.94)
+            let r0 = innerR + (outer - innerR) * f
+            let r1 = innerR + (outer - innerR) * min(1, f + rh.r(0.10, 0.42))
+            pen(p, [pnt(cx + cos(t) * r0, cy + sin(t) * r0 * 0.94),
+                    pnt(cx + cos(t + rh.r(0.10, 0.34)) * r1,
+                        cy + sin(t + rh.r(0.10, 0.34)) * r1 * 0.94)],
+                weight: rh.r(1.6, 6.0),
+                colour: (rh.chance(0.55) ? Tone(r: 0.451, g: 0.353, b: 0.220)
+                         : Tone(r: 0.976, g: 0.949, b: 0.878)).al(rh.r(0.05, 0.22)),
+                wobble: 0.5, taper: true, seed: bits(Int(t * 1000)))
+            t += 0.02
         }
-        for _ in 0..<180 {
-            let ax = rh.r(-0.5, 4.5)
-            let rr = rh.r(156, 246)
-            p.disc(cx + cos(ax) * rr, cy + sin(ax) * rr * 0.92, rh.r(1.0, 3.4),
-                   Field.sepia.dk(0.10).al(rh.r(0.08, 0.24)))
+        var ridge = aStart
+        while ridge <= aEnd {
+            let (outer, innerR) = hornRadius(ridge)
+            let r = innerR + (outer - innerR) * 0.30
+            pen(p, [pnt(cx + cos(ridge) * r, cy + sin(ridge) * r * 0.94),
+                    pnt(cx + cos(ridge + 0.06) * r, cy + sin(ridge + 0.06) * r * 0.94)],
+                weight: 9, colour: Field.night.al(0.16), wobble: 0.3, taper: false,
+                seed: bits(Int(ridge * 700)))
+            ridge += 0.30
+        }
+        if let g = CGGradient(colorsSpace: rgbSpace,
+                              colors: [cg(Tone(r: 1, g: 0.988, b: 0.945).al(0.55)),
+                                       cg(Field.oat.al(0))] as CFArray,
+                              locations: [0, 1]) {
+            p.ctx.drawRadialGradient(g, startCenter: CGPoint(x: cx - 150, y: cy - 160),
+                                     startRadius: 0,
+                                     endCenter: CGPoint(x: cx - 150, y: cy - 160),
+                                     endRadius: 300, options: [])
         }
     }
 

@@ -3,6 +3,7 @@ import SwiftUI
 struct TrialView: View {
     let field: TrialField
     let meet: DayCard?
+    var drill: Bool = false
     let onClose: () -> Void
 
     @EnvironmentObject var store: TrialStore
@@ -13,6 +14,12 @@ struct TrialView: View {
     @State private var phaseSamples: [TrialPhase: [Double]] = [:]
     @State private var gatesTaken: [Bool] = [false, false, false]
     @State private var crossed = false
+    @State private var drillPoints = 0
+    @State private var drillQuality: Double = 0
+    @State private var freshHonours: [TrialHonour] = []
+    @State private var drillOutrun: Double = 0
+    @State private var drillLift: Double = 0
+    @State private var drillFetch: Double = 0
     @State private var outrunWidth: Double = 0
     @State private var sentSide: DogCommand = .comeBye
     @State private var strokePoints: [CGPoint] = []
@@ -152,8 +159,12 @@ struct TrialView: View {
                 gatesTaken[0] = true
             }
             if distance(c, course.post) < 0.12 {
-                phase = .drive
-                Nudge.firm()
+                if drill {
+                    completeDrill()
+                } else {
+                    phase = .drive
+                    Nudge.firm()
+                }
             }
         case .drive:
             if abs(Double(c.x) - Double(course.driveGate.x)) < course.gateWidth
@@ -450,6 +461,30 @@ struct TrialView: View {
         }
     }
 
+    private func completeDrill() {
+        guard phase != .finished else { return }
+        phase = .finished
+
+        var outrunScore = max(0, min(1, outrunWidth / 0.30))
+        if crossed { outrunScore *= 0.35 }
+        let liftScore = phaseSamples[.lift] == nil ? 0.4
+            : max(0, min(1, 1 - (phaseSamples[.lift]!.reduce(0, +)
+                                 / Double(max(1, phaseSamples[.lift]!.count)))))
+        var fetchScore = 0.0
+        if let list = phaseSamples[.fetch], !list.isEmpty {
+            fetchScore = max(0, min(1, 1 - (list.reduce(0, +) / Double(list.count)) / 0.20))
+        }
+        if gatesTaken[0] { fetchScore = min(1, fetchScore + 0.18) }
+        let quality = max(0, min(1, outrunScore * 0.40 + liftScore * 0.24 + fetchScore * 0.36))
+        drillQuality = quality
+        drillOutrun = outrunScore
+        drillLift = liftScore
+        drillFetch = fetchScore
+        drillPoints = store.finishDrill(quality: quality, commands: commandCount)
+        freshHonours = store.newlyEarnedHonours()
+        Nudge.heavy()
+    }
+
     private func finish() {
         guard phase != .finished else { return }
         phase = .finished
@@ -484,11 +519,51 @@ struct TrialView: View {
                              shed: shedScore, pen: penScore, seconds: elapsed,
                              commands: commandCount, track: flattenTrack(sim.track))
         improved = store.finish(field: field, result: res, card: card, meet: meet)
+        freshHonours = store.newlyEarnedHonours()
         Nudge.heavy()
     }
 
     @ViewBuilder private var finishOverlay: some View {
-        if phase == .finished, let r = result {
+        if phase == .finished, drill {
+            ZStack {
+                Color.black.opacity(0.58).ignoresSafeArea()
+                    .onTapGesture { onClose() }
+                VStack {
+                    Spacer(minLength: 0)
+                    CanvasCard(padding: 16) {
+                        VStack(alignment: .leading, spacing: 11) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Gather at \(field.name)").font(Slate.title(19))
+                                    .foregroundColor(Hill.ink)
+                                Text("Out, lift and fetch. No drive, no shed, no pen.")
+                                    .font(Slate.italic(13)).foregroundColor(Hill.inkSoft)
+                            }
+                            PointRow(label: "Outrun", value: drillOutrun, maxPoints: 20,
+                                     tint: Hill.moss)
+                            PointRow(label: "Lift", value: drillLift, maxPoints: 10,
+                                     tint: Hill.turfPale)
+                            PointRow(label: "Fetch", value: drillFetch, maxPoints: 20,
+                                     tint: Hill.sepia)
+                            HStack(spacing: 10) {
+                                CountChip(value: "+\(drillPoints)", label: "points",
+                                          tint: Hill.rosetteRed)
+                                CountChip(value: "\(Int((drillQuality * 100).rounded()))",
+                                          label: "gather")
+                                CountChip(value: "\(store.liveStreak)", label: "streak")
+                            }
+                            CallBanner(title: "The morning counts",
+                                       detail: "A gather keeps the run of days going. The full course is still there when you have the time for it.",
+                                       tint: Hill.moss)
+                            GateButton(title: "Back to the yard", tint: Hill.bracken) { onClose() }
+                        }
+                    }
+                    .padding(.horizontal, 18)
+                    Spacer(minLength: 0)
+                }
+                .centreColumn()
+            }
+            .overlay(honourOverlay)
+        } else if phase == .finished, let r = result {
             ZStack {
                 Color.black.opacity(0.58).ignoresSafeArea()
                     .onTapGesture { onClose() }
@@ -532,6 +607,15 @@ struct TrialView: View {
                     Spacer(minLength: 0)
                 }
                 .centreColumn()
+            }
+            .overlay(honourOverlay)
+        }
+    }
+
+    @ViewBuilder private var honourOverlay: some View {
+        if let honour = freshHonours.first {
+            HonourToast(honour: honour) {
+                if !freshHonours.isEmpty { freshHonours.removeFirst() }
             }
         }
     }

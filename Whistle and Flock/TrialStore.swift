@@ -37,6 +37,9 @@ struct TrialSnapshot: Codable {
     var whistles: Int?
     var pens: Int?
     var plateRead: [String]?
+    var earnedHonours: [String]?
+    var drills: Int?
+    var drillBest: Double?
 }
 
 final class TrialStore: ObservableObject {
@@ -51,6 +54,9 @@ final class TrialStore: ObservableObject {
     @Published var whistles = 0
     @Published var pens = 0
     @Published var plateRead: Set<String> = []
+    @Published var earnedHonours: Set<String> = []
+    @Published var drills = 0
+    @Published var drillBest: Double = 0
 
     private let key = "whistleandflock.cards.v1"
 
@@ -93,6 +99,34 @@ final class TrialStore: ObservableObject {
 
     func countWhistle() {
         whistles += 1
+    }
+
+    func finishDrill(quality: Double, commands: Int) -> Int {
+        let day = Meets.dayIndex()
+        drills += 1
+        whistles += commands
+        drillBest = max(drillBest, quality)
+        let earned = Int((quality * 44).rounded()) + 8
+        points += earned
+        if lastRunDay != day {
+            if lastRunDay == day - 1 { streak += 1 } else { streak = 1 }
+            lastRunDay = day
+            bestStreak = max(bestStreak, streak)
+        }
+        saveNow()
+        return earned
+    }
+
+    func newlyEarnedHonours() -> [TrialHonour] {
+        var fresh: [TrialHonour] = []
+        for honour in HonourBoard.all where !earnedHonours.contains(honour.id) {
+            if honour.test(self) {
+                earnedHonours.insert(honour.id)
+                fresh.append(honour)
+            }
+        }
+        if !fresh.isEmpty { saveNow() }
+        return fresh
     }
 
     func finish(field: TrialField, result: TrialResult, card: TrialCard, meet: DayCard?) -> Bool {
@@ -142,13 +176,18 @@ final class TrialStore: ObservableObject {
         whistles = snap.whistles ?? 0
         pens = snap.pens ?? 0
         plateRead = Set(snap.plateRead ?? [])
+        earnedHonours = Set(snap.earnedHonours ?? [])
+        drills = snap.drills ?? 0
+        drillBest = snap.drillBest ?? 0
     }
 
     func saveNow() {
         let snap = TrialSnapshot(onboarded: onboarded, points: points, streak: streak,
                                  bestStreak: bestStreak, lastRunDay: lastRunDay, cards: cards,
                                  meets: meets, runs: runs, whistles: whistles, pens: pens,
-                                 plateRead: Array(plateRead))
+                                 plateRead: Array(plateRead),
+                                 earnedHonours: Array(earnedHonours),
+                                 drills: drills, drillBest: drillBest)
         if let data = try? JSONEncoder().encode(snap) {
             UserDefaults.standard.set(data, forKey: key)
         }

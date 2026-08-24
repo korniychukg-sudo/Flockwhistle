@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		WF0000000000000000003099 /* TrialRosettes.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000001099 /* TrialRosettes.swift */; };
 		WF0000000000000000003001 /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000001001 /* CardsView.swift */; };
 		WF0000000000000000003002 /* CraftLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000001002 /* CraftLibrary.swift */; };
 		WF0000000000000000003003 /* CraftViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000001003 /* CraftViews.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		WF0000000000000000001099 /* TrialRosettes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrialRosettes.swift; sourceTree = "<group>"; };
 		WF0000000000000000001001 /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
 		WF0000000000000000001002 /* CraftLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftLibrary.swift; sourceTree = "<group>"; };
 		WF0000000000000000001003 /* CraftViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftViews.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 		WF0000000000000000006002 /* Whistle and Flock */ = {
 			isa = PBXGroup;
 			children = (
+				WF0000000000000000001099 /* TrialRosettes.swift */,
 				WF0000000000000000001001 /* CardsView.swift */,
 				WF0000000000000000001002 /* CraftLibrary.swift */,
 				WF0000000000000000001003 /* CraftViews.swift */,
@@ -170,6 +173,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				WF0000000000000000003099 /* TrialRosettes.swift in Sources */,
 				WF0000000000000000003001 /* CardsView.swift in Sources */,
 				WF0000000000000000003002 /* CraftLibrary.swift in Sources */,
 				WF0000000000000000003003 /* CraftViews.swift in Sources */,

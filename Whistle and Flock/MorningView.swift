@@ -3,12 +3,16 @@ import SwiftUI
 struct MorningView: View {
     @EnvironmentObject var store: TrialStore
     @State private var openTrial = false
+    @State private var openDrill = false
     @State private var openPlate: String?
     @State private var plateTitle = ""
 
     private var day: Int { Meets.dayIndex() }
     private var meet: DayCard { Meets.forDay(day) }
     private var done: MeetRecord? { store.todayMeet() }
+    private var drillField: TrialField {
+        FieldBook.all[(day * 5 + store.drills * 3) % FieldBook.all.count]
+    }
 
     var body: some View {
         ScrollView {
@@ -17,8 +21,10 @@ struct MorningView: View {
                 RiseIn(index: 0) { HillScene(field: meet.field) }
                 RiseIn(index: 1) { meetCard }
                 RiseIn(index: 2) { flockCard }
-                RiseIn(index: 3) { standingCard }
-                RiseIn(index: 4) { readingCard }
+                RiseIn(index: 3) { drillCard }
+                RiseIn(index: 4) { standingCard }
+                RiseIn(index: 5) { boardCard }
+                RiseIn(index: 6) { readingCard }
                 Color.clear.frame(height: 12)
             }
             .padding(.horizontal, Pitch.gutter)
@@ -29,6 +35,10 @@ struct MorningView: View {
         .navigationBarHidden(true)
         .fullScreenCover(isPresented: $openTrial) {
             TrialView(field: meet.field, meet: meet) { openTrial = false }
+                .environmentObject(store)
+        }
+        .fullScreenCover(isPresented: $openDrill) {
+            TrialView(field: drillField, meet: nil, drill: true) { openDrill = false }
                 .environmentObject(store)
         }
         .sheet(isPresented: Binding(get: { openPlate != nil },
@@ -103,6 +113,55 @@ struct MorningView: View {
                             .frame(width: 7, height: 7)
                     }
                     Text("ground").font(Slate.body(11)).foregroundColor(Hill.inkPale)
+                }
+            }
+        }
+    }
+
+    private var drillCard: some View {
+        CanvasCard {
+            VStack(alignment: .leading, spacing: 10) {
+                FieldHead(title: "The morning gather", note: "a minute on the hill")
+                Text("Send him out, lift them quietly and fetch them to your feet. No drive, no shed, no pen. It is what the dog does every morning of its working life, and the run of days counts it.")
+                    .font(Slate.body(14)).foregroundColor(Hill.inkSoft)
+                    .fixedSize(horizontal: false, vertical: true)
+                HStack(spacing: 10) {
+                    CountChip(value: "\(drillField.sheepCount)", label: "sheep", onCanvas: true)
+                    CountChip(value: "\(store.drills)", label: "gathers", onCanvas: true)
+                    CountChip(value: store.drills > 0
+                              ? "\(Int((store.drillBest * 100).rounded()))" : "—",
+                              label: "best", onCanvas: true)
+                }
+                Text(drillField.name).font(Slate.title(16)).foregroundColor(Hill.ink)
+                GateButton(title: "Take the gather", subtitle: drillField.place,
+                           tint: Hill.moss) { openDrill = true }
+            }
+        }
+    }
+
+    private var boardCard: some View {
+        let earned = HonourBoard.all.filter { store.earnedHonours.contains($0.id) }
+        let next = HonourBoard.all.first { !store.earnedHonours.contains($0.id) }
+        return CanvasCard {
+            VStack(alignment: .leading, spacing: 10) {
+                FieldHead(title: "The honours board",
+                          note: "\(earned.count) of \(HonourBoard.all.count) won")
+                HStack(spacing: 8) {
+                    ForEach(HonourBoard.all.prefix(6)) { honour in
+                        HonourEmblem(kind: honour.emblem,
+                                     earned: store.earnedHonours.contains(honour.id), size: 42)
+                    }
+                    Spacer(minLength: 0)
+                }
+                PointRow(label: "Won", value: Double(earned.count) / Double(HonourBoard.all.count),
+                         maxPoints: HonourBoard.all.count, tint: Hill.rosetteRed)
+                if let next = next {
+                    Text("Still open: \(next.title) — \(next.note)")
+                        .font(Slate.body(13)).foregroundColor(Hill.inkSoft)
+                        .fixedSize(horizontal: false, vertical: true)
+                } else {
+                    Text("There is nothing left on the board to win.")
+                        .font(Slate.italic(13)).foregroundColor(Hill.rosetteRed)
                 }
             }
         }

@@ -3,18 +3,27 @@ import SwiftUI
 struct CardsView: View {
     @EnvironmentObject var store: TrialStore
     @State private var selected: String?
+    @State private var showHonours = false
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 VStack(alignment: .leading, spacing: 3) {
                     Text("THE CARDS").font(Slate.title(11)).tracking(3.2).foregroundColor(Hill.brass)
-                    Text("Your runs").font(Slate.title(24)).foregroundColor(Hill.canvas)
-                    Text("Every card carries the judge's points and the line your sheep actually took across the field.")
+                    Text(showHonours ? "The board" : "Your runs")
+                        .font(Slate.title(24)).foregroundColor(Hill.canvas)
+                    Text(showHonours
+                         ? "The honours the society has written against your name, and the ones still open."
+                         : "Every card carries the judge's points and the line your sheep actually took across the field.")
                         .font(Slate.italic(14)).foregroundColor(Hill.canvas.opacity(0.72))
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
+                boardPicker
+
+                if showHonours {
+                    HonourCaseView()
+                } else {
                 HStack(spacing: 10) {
                     CountChip(value: "\(store.cardCount)/\(FieldBook.all.count)", label: "fields",
                               tint: Hill.moss, onCanvas: false)
@@ -60,6 +69,7 @@ struct CardsView: View {
                         }
                     }
                 }
+                }
                 Color.clear.frame(height: 12)
             }
             .padding(.horizontal, Pitch.gutter)
@@ -99,6 +109,42 @@ struct CardsView: View {
 
     private var sorted: [TrialCard] {
         store.cards.values.sorted { $0.total > $1.total }
+    }
+
+    private var boardPicker: some View {
+        HStack(spacing: 0) {
+            pickerTab(title: "Cards", note: "\(store.cardCount)", on: !showHonours) {
+                showHonours = false
+            }
+            pickerTab(title: "Honours", note: "\(store.earnedHonours.count)", on: showHonours) {
+                showHonours = true
+            }
+        }
+        .padding(3)
+        .background(
+            RoundedRectangle(cornerRadius: 9, style: .continuous)
+                .fill(Hill.turfDeep)
+                .overlay(RoundedRectangle(cornerRadius: 9, style: .continuous)
+                    .stroke(Hill.hairlineLight, lineWidth: 1))
+        )
+    }
+
+    private func pickerTab(title: String, note: String, on: Bool,
+                           action: @escaping () -> Void) -> some View {
+        Button(action: { Nudge.light(); withAnimation(.easeOut(duration: 0.2)) { action() } }) {
+            HStack(spacing: 6) {
+                Text(title).font(Slate.title(14))
+                Text(note).font(Slate.figure(12)).opacity(0.75)
+            }
+            .foregroundColor(on ? Hill.canvas : Hill.canvas.opacity(0.62))
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 7, style: .continuous)
+                    .fill(on ? Hill.rosetteRed : Color.clear)
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     private func cardRow(_ card: TrialCard, full: Bool = false) -> some View {
