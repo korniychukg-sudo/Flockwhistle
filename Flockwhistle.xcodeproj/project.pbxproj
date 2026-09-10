@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		WF00000000000000004091 /* FlockGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF00000000000000002091 /* FlockGate.swift */; };
+		WF00000000000000004092 /* FlockPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF00000000000000002092 /* FlockPanel.swift */; };
+		WF00000000000000004093 /* FlockSplash.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF00000000000000002093 /* FlockSplash.swift */; };
 		WF0000000000000000003099 /* TrialRosettes.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000001099 /* TrialRosettes.swift */; };
 		WF0000000000000000003001 /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000001001 /* CardsView.swift */; };
 		WF0000000000000000003002 /* CraftLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000001002 /* CraftLibrary.swift */; };
@@ -28,6 +31,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		WF00000000000000002091 /* FlockGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlockGate.swift; sourceTree = "<group>"; };
+		WF00000000000000002092 /* FlockPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlockPanel.swift; sourceTree = "<group>"; };
+		WF00000000000000002093 /* FlockSplash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlockSplash.swift; sourceTree = "<group>"; };
 		WF0000000000000000001099 /* TrialRosettes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrialRosettes.swift; sourceTree = "<group>"; };
 		WF0000000000000000001001 /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
 		WF0000000000000000001002 /* CraftLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftLibrary.swift; sourceTree = "<group>"; };
@@ -72,6 +78,9 @@
 		WF0000000000000000006002 /* Flockwhistle */ = {
 			isa = PBXGroup;
 			children = (
+				WF00000000000000002091 /* FlockGate.swift */,
+				WF00000000000000002092 /* FlockPanel.swift */,
+				WF00000000000000002093 /* FlockSplash.swift */,
 				WF0000000000000000001099 /* TrialRosettes.swift */,
 				WF0000000000000000001001 /* CardsView.swift */,
 				WF0000000000000000001002 /* CraftLibrary.swift */,
@@ -173,6 +182,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				WF00000000000000004091 /* FlockGate.swift in Sources */,
+				WF00000000000000004092 /* FlockPanel.swift in Sources */,
+				WF00000000000000004093 /* FlockSplash.swift in Sources */,
 				WF0000000000000000003099 /* TrialRosettes.swift in Sources */,
 				WF0000000000000000003001 /* CardsView.swift in Sources */,
 				WF0000000000000000003002 /* CraftLibrary.swift in Sources */,

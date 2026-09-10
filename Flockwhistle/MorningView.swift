@@ -25,6 +25,7 @@ struct MorningView: View {
                 RiseIn(index: 4) { standingCard }
                 RiseIn(index: 5) { boardCard }
                 RiseIn(index: 6) { readingCard }
+                FlockPrivacyRow()
                 Color.clear.frame(height: 12)
             }
             .padding(.horizontal, Pitch.gutter)
