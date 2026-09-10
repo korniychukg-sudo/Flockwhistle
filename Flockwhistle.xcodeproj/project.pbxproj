@@ -22,7 +22,7 @@
 		WF0000000000000000003012 /* TrialRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000001012 /* TrialRootView.swift */; };
 		WF0000000000000000003013 /* TrialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000001013 /* TrialStore.swift */; };
 		WF0000000000000000003014 /* TrialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000001014 /* TrialView.swift */; };
-		WF0000000000000000003015 /* WhistleAndFlockApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000001015 /* WhistleAndFlockApp.swift */; };
+		WF0000000000000000003015 /* FlockwhistleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000001015 /* FlockwhistleApp.swift */; };
 		WF0000000000000000004001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000002001 /* Assets.xcassets */; };
 		WF0000000000000000004002 /* Art in Resources */ = {isa = PBXBuildFile; fileRef = WF0000000000000000002002 /* Art */; };
 /* End PBXBuildFile section */
@@ -43,11 +43,11 @@
 		WF0000000000000000001012 /* TrialRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrialRootView.swift; sourceTree = "<group>"; };
 		WF0000000000000000001013 /* TrialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrialStore.swift; sourceTree = "<group>"; };
 		WF0000000000000000001014 /* TrialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrialView.swift; sourceTree = "<group>"; };
-		WF0000000000000000001015 /* WhistleAndFlockApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhistleAndFlockApp.swift; sourceTree = "<group>"; };
+		WF0000000000000000001015 /* FlockwhistleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlockwhistleApp.swift; sourceTree = "<group>"; };
 		WF0000000000000000002001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		WF0000000000000000002002 /* Art */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Art; sourceTree = "<group>"; };
 		WF0000000000000000002090 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		WF0000000000000000002099 /* Whistle and Flock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Whistle and Flock.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		WF0000000000000000002099 /* Flockwhistle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flockwhistle.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,12 +64,12 @@
 		WF0000000000000000006001 = {
 			isa = PBXGroup;
 			children = (
-				WF0000000000000000006002 /* Whistle and Flock */,
+				WF0000000000000000006002 /* Flockwhistle */,
 				WF0000000000000000006003 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		WF0000000000000000006002 /* Whistle and Flock */ = {
+		WF0000000000000000006002 /* Flockwhistle */ = {
 			isa = PBXGroup;
 			children = (
 				WF0000000000000000001099 /* TrialRosettes.swift */,
@@ -87,18 +87,18 @@
 				WF0000000000000000001012 /* TrialRootView.swift */,
 				WF0000000000000000001013 /* TrialStore.swift */,
 				WF0000000000000000001014 /* TrialView.swift */,
-				WF0000000000000000001015 /* WhistleAndFlockApp.swift */,
+				WF0000000000000000001015 /* FlockwhistleApp.swift */,
 				WF0000000000000000002001 /* Assets.xcassets */,
 				WF0000000000000000002002 /* Art */,
 				WF0000000000000000002090 /* Info.plist */,
 			);
-			path = "Whistle and Flock";
+			path = "Flockwhistle";
 			sourceTree = "<group>";
 		};
 		WF0000000000000000006003 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				WF0000000000000000002099 /* Whistle and Flock.app */,
+				WF0000000000000000002099 /* Flockwhistle.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -106,9 +106,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		WF0000000000000000007001 /* Whistle and Flock */ = {
+		WF0000000000000000007001 /* Flockwhistle */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = WF0000000000000000008001 /* Build configuration list for PBXNativeTarget "Whistle and Flock" */;
+			buildConfigurationList = WF0000000000000000008001 /* Build configuration list for PBXNativeTarget "Flockwhistle" */;
 			buildPhases = (
 				WF0000000000000000009001 /* Sources */,
 				WF0000000000000000005001 /* Frameworks */,
@@ -118,9 +118,9 @@
 			);
 			dependencies = (
 			);
-			name = "Whistle and Flock";
-			productName = "Whistle and Flock";
-			productReference = WF0000000000000000002099 /* Whistle and Flock.app */;
+			name = "Flockwhistle";
+			productName = "Flockwhistle";
+			productReference = WF0000000000000000002099 /* Flockwhistle.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -138,7 +138,7 @@
 					};
 				};
 			};
-			buildConfigurationList = WF0000000000000000008002 /* Build configuration list for PBXProject "Whistle and Flock" */;
+			buildConfigurationList = WF0000000000000000008002 /* Build configuration list for PBXProject "Flockwhistle" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -151,7 +151,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				WF0000000000000000007001 /* Whistle and Flock */,
+				WF0000000000000000007001 /* Flockwhistle */,
 			);
 		};
 /* End PBXProject section */
@@ -188,7 +188,7 @@
 				WF0000000000000000003012 /* TrialRootView.swift in Sources */,
 				WF0000000000000000003013 /* TrialStore.swift in Sources */,
 				WF0000000000000000003014 /* TrialView.swift in Sources */,
-				WF0000000000000000003015 /* WhistleAndFlockApp.swift in Sources */,
+				WF0000000000000000003015 /* FlockwhistleApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,14 +294,14 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = "Whistle and Flock/Info.plist";
+				INFOPLIST_FILE = "Flockwhistle/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.whistleandflock.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.flockwhistle.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -323,14 +323,14 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = "Whistle and Flock/Info.plist";
+				INFOPLIST_FILE = "Flockwhistle/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.whistleandflock.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.flockwhistle.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -345,7 +345,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		WF0000000000000000008001 /* Build configuration list for PBXNativeTarget "Whistle and Flock" */ = {
+		WF0000000000000000008001 /* Build configuration list for PBXNativeTarget "Flockwhistle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				WF0000000000000000008103 /* Debug */,
@@ -354,7 +354,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		WF0000000000000000008002 /* Build configuration list for PBXProject "Whistle and Flock" */ = {
+		WF0000000000000000008002 /* Build configuration list for PBXProject "Flockwhistle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				WF0000000000000000008101 /* Debug */,

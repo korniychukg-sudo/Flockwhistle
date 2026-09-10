@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct WhistleAndFlockApp: App {
+struct FlockwhistleApp: App {
     @StateObject private var store = TrialStore()
     @Environment(\.scenePhase) private var scenePhase
 

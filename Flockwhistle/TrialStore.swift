@@ -58,7 +58,7 @@ final class TrialStore: ObservableObject {
     @Published var drills = 0
     @Published var drillBest: Double = 0
 
-    private let key = "whistleandflock.cards.v1"
+    private let key = "flockwhistle.cards.v1"
 
     init() { load() }
 
